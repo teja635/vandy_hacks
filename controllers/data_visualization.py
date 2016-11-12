@@ -56,7 +56,7 @@ def get_overlay_image(weightArr, timeCode):
             startCol += colBlock
         startRow += rowBlock
         startCol = 0
-    scaledImg.save(timeCode)
+    scaledImg.save(timeCode + ".png")
 
 req = urllib2.Request('http://10.67.229.19:3000/data')
 data = urllib2.urlopen(req)
