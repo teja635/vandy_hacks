@@ -48,6 +48,26 @@ router.put('/:putx/:puty', function(req, res){
 
     console.log('finished');
   });
+  PythonShell.run('/controllers/flu_vis.py', function (err) {
+  if (err) throw err;
+    /*fs.unlink('heat_maps/one.png');
+    fs.unlink('heat_maps/two.png');
+    fs.unlink('heat_maps/three.png');
+    fs.unlink('heat_maps/week.png');
+    fs.unlink('heat_maps/month.png');*/
+    console.log('hi');
+
+  var arr = ['one_pollen.png', 'two_pollen.png', 'three_pollen.png', 'week_pollen.png', 'month_pollen.png'];
+  arr.forEach(function(filename){
+    fs.move(filename, 'heat_maps/'+filename, function(err){
+      if(err){ console.error(err);}
+      console.log('moved ' + filename + ' to the /heatmaps directory. ');
+    })
+  });
+
+
+    console.log('finished');
+  });
 
   for(var r = 0; r < global.data.length; r++){
     if(global.data[r].x === parseInt(req.params.putx) && global.data[r].y === parseInt(req.params.puty)){

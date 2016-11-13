@@ -24,8 +24,8 @@
         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Data to Show
         <span class="caret"></span></button>
         <ul class="dropdown-menu">
-          <li id="flu"><a href="#">FLU</a></li>
-          <li id="pollen"><a href="pollen.html">POLLEN</a></li>
+          <li id="flu"><a href="index.html">FLU</a></li>
+          <li id="pollen"><a href="#">POLLEN</a></li>
         </ul>
       </div>
       <ul style = "padding-left: 20px; padding-top: 20px; padding-bottom: 12px" class="nav nav-pills">
@@ -49,7 +49,7 @@
 
     <div style="width: 50%; float:right; padding-top: 30px">
        <h1>CROWDSOURCE DATA</h1>
-       <h4>We are getting data from everyone so people can visualize places which have a lot of the flu
+       <h4>We are getting data from everyone so people can visualize places which have high precedent of disease/pollen
           so you know when to stay safe stay clean from those germs. </h4>
         <h2>
           Stay Safe Stay Clean Nashville!
@@ -113,7 +113,7 @@
         changeImagePollen(this.id);
       });
       function changeImage(k){
-        image.src = "http://10.67.229.19:3000/"+k+".png";
+        image.src = "http://10.67.229.19:3000/"+k+"_pollen.png";
       }
       function put_request(){
         x /= (1043/30);
