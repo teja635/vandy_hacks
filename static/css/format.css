@@ -1,0 +1,8 @@
+ul {
+  display: flex;
+  justify-content: center;
+}
+
+ul li {
+  padding: 0 8px;
+}

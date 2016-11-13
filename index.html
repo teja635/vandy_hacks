@@ -1,8 +1,129 @@
-<form id        =  "uploadForm"
-     enctype   =  "multipart/form-data"
-     action    =  "/users/picture"
-     method    =  "post"
->
-<input type="file" name="userPhoto" />
-<input type="submit" value="Upload Image" name="submit">
-</form>
+<html>
+  <head>
+    <title>Stay Safe Stay Clean</title>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.3/angular-route.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://10.67.229.19:3000/format.css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script src="script.js"></script>
+    <style type ="text/css" >
+   .footer{
+         position: fixed;
+         text-align: center;
+         bottom: 10px;
+         width: 85%;
+     }
+  </style>
+
+  </head>
+  <body>
+    <div style="width: 50%; float:left">
+      <div style = "padding-left: 20px; padding-top: 20px;" class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Data to Show
+        <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+          <li><a href="#">FLU</a></li>
+          <li><a href="#">POLLEN</a></li>
+        </ul>
+      </div>
+      <ul style = "padding-left: 20px; padding-top: 20px; padding-bottom: 12px" class="nav nav-pills">
+        <li id="nash" class="active"><a href="#">City Map</a></li>
+        <li id="one"><a href="#">One Day</a></li>
+        <li id="two"><a href="#">Two Days</a></li>
+        <li id="three"><a href="#">Three Days</a></li>
+        <li id="week"><a href="#">One Week</a></li>
+        <li id="month"><a href="#">One Month</a></li>
+      </ul>
+
+      <img src="http://10.67.229.19:3000/disease.png" id="marker" width ="40" height ="40" style="display: none; position: absolute;" />
+      <img style = "padding-left: 15px"id = "map" width="500" height ="700" src="http://10.67.229.19:3000/nash.png">
+      <p id = "para"></p>
+
+
+    </div>
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuHCNXvFagYQT1EkAJocd82UNy1wkNo78&callback=initMap">
+    </script>
+
+    <div style="width: 50%; float:right; padding-top: 30px">
+       <h1>CROWDSOURCE DATA</h1>
+       <h4>We are getting data from everyone so people can visualize places which have a lot of the flu
+          so you know when to stay safe stay clean from those germs. </h4>
+        <h2>
+          Stay Safe Stay Clean Nashville!
+        </h2>
+       <div class="footer">
+         <button type="button" onclick="put_request()" class="btn btn-lg btn-primary active" data-toggle="modal" data-target="#myModal">Submit</button>
+         <!-- Modal -->
+      <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Success</h4>
+            </div>
+            <div class="modal-body">
+              <p>Thank you! With your help we can help millions avoid disease</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+     </div>
+    </div>
+    <script>
+      document.getElementById('map').onclick = function(e)
+      {
+         with(document.getElementById('marker'))
+         {
+              style.left = e.pageX-20;
+              style.top = e.pageY-20;
+              style.display = 'block';
+         }
+         // Here you forward the coordinates e.pageX, e.pageY
+         // ... to whatever function that needs it
+      };
+      var image = document.getElementById("map");
+      var par = document.getElementById("para");
+      x = 0;
+      y = 0;
+      $(document).ready(function() {
+        $('img').click(function(e) {
+          var offset = $(this).offset();
+          x = (e.pageX - offset.left);
+          y = (e.pageY - offset.top);
+          console.log("x -> " + (e.pageX - offset.left) + "\t y -> " + (e.pageY - offset.top));
+        });
+      });
+      $(".nav li").on("click", function(){
+        $(".nav li").removeClass("active");
+        $(this).addClass("active");
+        changeImage(this.id);
+      });
+      function changeImage(k){
+        image.src = "http://10.67.229.19:3000/"+k+".png";
+      }
+      function put_request(){
+        x /= (1043/30);
+        y /= (673/30)
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("demo").innerHTML =
+            this.responseText;
+          }
+        };
+        xhttp.open("PUT", "http://10.67.229.19:3000/data/x/y", true);
+        xhttp.send();
+      }
+    </script>
+  </body>
+
+</html>

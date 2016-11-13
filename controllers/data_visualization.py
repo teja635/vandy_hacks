@@ -1,11 +1,10 @@
-%matplotlib inline
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import json
 import sys
 import urllib2
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageDraw
 
 class DiseaseData(object):
     def __init__(self, jsonStr):
@@ -13,7 +12,7 @@ class DiseaseData(object):
 
 def get_weight_arr(json):
     diseaseData = DiseaseData(json)
-    
+
     # Generates 2D Array of 0's
     maxRow = 0
     maxCol = 0
@@ -28,34 +27,41 @@ def get_weight_arr(json):
         for y in xrange(0, maxCol + 1):
             tempArr.append({"one":0,"two":0,"three":0,"week":0,"month":0})
         weightArr.append(tempArr)
-    
+
     # Assignes each index in weightArr to the weight in each index.
     for dataIndex in xrange(len(diseaseData.data)):
         weightArr[diseaseData.data[dataIndex]['x']][diseaseData.data[dataIndex]['y']] = diseaseData.data[dataIndex]['time']
-    
+
     return weightArr
 
 def get_overlay_image(weightArr, timeCode):
     img = Image.new("RGB", (len(weightArr), len(weightArr[0])), (255, 255, 255))
     for x in xrange(len(weightArr)):
         for y in xrange(len(weightArr[0])):
-            img.putpixel((x, y), (weightArr[x][y][timeCode], 0, 255 - weightArr[x][y][timeCode]))
-    
-    rowBlock = 1000/len(weightArr)
-    colBlock = 1000/len(weightArr[0])
-    scaledImg = Image.new("RGB", (1000, 1000), (255, 255, 255))
+            img.putpixel((x, y), (weightArr[x][y][timeCode], 0, 0))
+
+    rowBlock = 672/len(weightArr)
+    colBlock = 1043/len(weightArr[0])
+    scaledImg = Image.new("RGB", (672, 1043), (255, 255, 255))
     startRow = 0
     startCol = 0
-    
+
+    xscale = 1043/30;
+    yscale = 672/30
+
     for x in xrange(len(weightArr)):
         for y in xrange(len(weightArr)):
             for scaledX in xrange(startRow, rowBlock + startRow):
                 for scaledY in xrange(startCol, colBlock + startCol):
-                    scaledImg.putpixel((scaledX, scaledY), 
-                                       (weightArr[x][y][timeCode] * 255/100, 0, 255 - weightArr[x][y][timeCode] * 255/100))
+                    scaledImg.putpixel((scaledX, scaledY),
+                                       (weightArr[x][y][timeCode] * 255/100, 0, 0))
             startCol += colBlock
         startRow += rowBlock
         startCol = 0
+    background = Image.open('nash.png')
+    background = background.convert('RGBA')
+    scaledImg = scaledImg.convert('RGBA')
+    scaledImg = Image.blend(background, scaledImg, .3)
     scaledImg.save(timeCode + ".png")
 
 req = urllib2.Request('http://10.67.229.19:3000/data')
