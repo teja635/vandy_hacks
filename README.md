@@ -4,15 +4,19 @@ A crowd sourced disease prevention app which uses data which users reported to g
 
 ## Node Installation
 brew install node
+
 npm install -g nodemon(if you plan to make changes and want to see them in real time)
 
 ## Python packages needed
 pip install pillow
+
 pip install matplotlib
 
 ## Running the app
 cd into vandy_hacks/ directory
+
 npm install
+
 node app.js (or nodemon app.js if you want to see changes in real time)
 
 You can now only view pollen data and flu data. Charts and graphs are coming soon to the web version. 
